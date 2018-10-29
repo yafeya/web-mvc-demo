@@ -5,10 +5,16 @@ using System.Web;
 
 namespace WebApiDemo.Models
 {
-    public class PersonsRepository
+    public interface IPersonRepository
+    {
+        int Count { get; }
+        IEnumerable<Person> GetPersons();
+        void Update(Person person);
+    }
+
+    public class PersonsRepository: IPersonRepository
     {
         private List<Person> mPersons = new List<Person>();
-        private static PersonsRepository mRepository = new PersonsRepository();
         private readonly Person[] Persons = {
             new Person{ ID=1, Name="Person1", Age=20 },
             new Person{ ID=2, Name="Person2", Age=20 },
@@ -19,7 +25,13 @@ namespace WebApiDemo.Models
 
         };
 
-        private PersonsRepository() {
+        public PersonsRepository()
+        {
+            Initialize();
+        }
+
+        private void Initialize()
+        {
             if (mPersons.Count == 0)
             {
                 mPersons.AddRange(Persons);
@@ -30,20 +42,20 @@ namespace WebApiDemo.Models
         {
             get { return mPersons.Count; }
         }
-
-        public void AddRange(IEnumerable<Person> persons)
-        {
-            mPersons.AddRange(persons);
-        }
-
+        
         public IEnumerable<Person> GetPersons()
         {
             return mPersons.ToArray();
         }
 
-        public static PersonsRepository Repository
+        public void Update(Person person)
         {
-            get { return mRepository; }
+            var existed = mPersons.Where(x => x.ID == person.ID).FirstOrDefault();
+            if (existed != null)
+            {
+                existed.Name = person.Name;
+                existed.Age = person.Age;
+            }
         }
     }
 }

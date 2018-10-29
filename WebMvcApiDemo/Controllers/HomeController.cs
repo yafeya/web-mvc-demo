@@ -9,9 +9,17 @@ namespace WebApiDemo.Controllers
 {
     public class HomeController : Controller
     {
+        private IPersonRepository mRepository;
+
+        public HomeController(IPersonRepository repository)
+        {
+            mRepository = repository;
+        }
+
         public ActionResult Index()
         {
-            var data = new HomeViewModel { Persons = PersonsRepository.Repository.GetPersons() };
+            var persons = mRepository.GetPersons();
+            var data = new HomeViewModel { Persons = persons };
             return View(data);
         }
 
@@ -30,10 +38,9 @@ namespace WebApiDemo.Controllers
         [HttpPost]
         public ActionResult Edit(Person person)
         {
-            var existed = PersonsRepository.Repository.GetPersons().Where(x => x.ID == person.ID).FirstOrDefault();
-            existed.Name = person.Name;
-            existed.Age = person.Age;
-            return RedirectToAction("Index", PersonsRepository.Repository.GetPersons());
+            mRepository.Update(person);
+            var persons = mRepository.GetPersons();
+            return RedirectToAction("Index", persons);
         }
     }
 

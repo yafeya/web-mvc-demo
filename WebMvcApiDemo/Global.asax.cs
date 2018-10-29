@@ -18,6 +18,13 @@ namespace WebApiDemo
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+            UnityMvcActivator.Start();
+        }
+
+        public override void Dispose()
+        {
+            UnityMvcActivator.Shutdown();
+            base.Dispose();
         }
     }
 }
