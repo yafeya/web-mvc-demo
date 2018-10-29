@@ -1,0 +1,22 @@
+﻿@model WebApiDemo.Models.Person
+<div>
+    @using (Html.BeginForm("Edit", "Home"))
+    {
+        <table>
+            <tr>
+                <td colspan="2">
+                    <input type="text" name="ID" value="@Model.ID" hidden="hidden" />
+                </td>
+            </tr>
+            <tr>
+                <td><label>Name:</label></td>
+                <td><input type="text" name="Name" value="@Model.Name" /></td>
+            </tr>
+            <tr>
+                <td><label>Age:</label></td>
+                <td><input type="text" name="Age" value="@Model.Age" /></td>
+            </tr>
+        </table>
+        <input type="submit" value="Edit" />
+    }
+</div>

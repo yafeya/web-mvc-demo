@@ -1,0 +1,43 @@
+﻿@model  WebApiDemo.Controllers.HomeViewModel
+
+<div>
+    @Html.Partial("TitleView")
+</div>
+
+<table>
+    <thead>
+        <tr>
+            <th width="80px">Name</th>
+            <th width="60px">Age</th>
+            <th width="40px">Edit</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var person in Model.Persons)
+        {
+            <tr>
+                <td>@person.Name</td>
+                <td>@person.Age</td>
+                <td>
+                    @Html.ActionLink("Edit", "SelectPerson", person, new { @class = "person-details" })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<div id="PersonDetails">
+    
+</div>
+
+@section scripts{
+    <script>
+        $(function () {
+            $('.person-details').on('click', function (e) {
+                $.get($(this).prop('href'), function (response) {
+                    $('#PersonDetails').html(response)
+                });
+                e.preventDefault();
+            });
+        });
+    </script>
+}
